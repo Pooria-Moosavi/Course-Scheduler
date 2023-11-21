@@ -36,56 +36,56 @@ classes = ['Classroom1', 'Classroom2', 'Classroom3', 'Classroom4', 'Classroom5',
 
 # Create a dictionary of teachers and their available credits
 teachers = {
-    'afshari': {'credits': 10, 'classes': 0, 'workdays': []},
-    'tajmir': {'credits': 10, 'classes': 0, 'workdays': []},
-    'nazemi': {'credits': 10, 'classes': 0, 'workdays': []},
-    'sayyadi': {'credits': 10, 'classes': 0, 'workdays': []},
-    'mamipoor': {'credits': 10, 'classes': 0, 'workdays': []},
-    'soheyli': {'credits': 10, 'classes': 0, 'workdays': []},
-    'ghaemi': {'credits': 10, 'classes': 0, 'workdays': []},
-    'khandan': {'credits': 10, 'classes': 0, 'workdays': []},
-    'ebrahimi': {'credits': 10, 'classes': 0, 'workdays': []},
-    'shaghaghi': {'credits': 10, 'classes': 0, 'workdays': []},
-    'monjazeb': {'credits': 10, 'classes': 0, 'workdays': []},
-    'amiri': {'credits': 10, 'classes': 0, 'workdays': []},
-    'rafei': {'credits': 10, 'classes': 0, 'workdays': []},
-    'khakestari': {'credits': 10, 'classes': 0, 'workdays': []},
-    'akbarian': {'credits': 10, 'classes': 0, 'workdays': []},
-    'ameli': {'credits': 10, 'classes': 0, 'workdays': []},
-    'karim': {'credits': 10, 'classes': 0, 'workdays': []},
-    'ganjbakhsh': {'credits': 10, 'classes': 0, 'workdays': []},
-    'masominia': {'credits': 10, 'classes': 0, 'workdays': []},
-    'esfahani': {'credits': 10, 'classes': 0, 'workdays': []},
-    'akbrian': {'credits': 10, 'classes': 0, 'workdays': []},
-    'teacher1': {'credits': 10, 'classes': 0, 'workdays': []}
+    'teacher1': {'credits': 10, 'classes': 0, 'workdays': []},
+    'teacher2': {'credits': 10, 'classes': 0, 'workdays': []},
+    'teacher3': {'credits': 10, 'classes': 0, 'workdays': []},
+    'teacher4': {'credits': 10, 'classes': 0, 'workdays': []},
+    'teacher5': {'credits': 10, 'classes': 0, 'workdays': []},
+    'teacher6': {'credits': 10, 'classes': 0, 'workdays': []},
+    'teacher7': {'credits': 10, 'classes': 0, 'workdays': []},
+    'teacher8': {'credits': 10, 'classes': 0, 'workdays': []},
+    'teacher9': {'credits': 10, 'classes': 0, 'workdays': []},
+    'teacher10': {'credits': 10, 'classes': 0, 'workdays': []},
+    'teacher11': {'credits': 10, 'classes': 0, 'workdays': []},
+    'teacher12': {'credits': 10, 'classes': 0, 'workdays': []},
+    'teacher13': {'credits': 10, 'classes': 0, 'workdays': []},
+    'teacher14': {'credits': 10, 'classes': 0, 'workdays': []},
+    'teacher15': {'credits': 10, 'classes': 0, 'workdays': []},
+    'teacher16': {'credits': 10, 'classes': 0, 'workdays': []},
+    'teacher17': {'credits': 10, 'classes': 0, 'workdays': []},
+    'teacher18': {'credits': 10, 'classes': 0, 'workdays': []},
+    'teacher19': {'credits': 10, 'classes': 0, 'workdays': []},
+    'teacher20': {'credits': 10, 'classes': 0, 'workdays': []},
+    'teacher21': {'credits': 10, 'classes': 0, 'workdays': []},
+    'teacher22': {'credits': 10, 'classes': 0, 'workdays': []}
 }
 
 
 course_to_teacher = {
-    'inter-finance': ['afshari'],
-    'Islamic-finance': ['tajmir'],
-    'economic-evaluation': ['nazemi', 'sayyadi'],
-    'indust-eco': ['afshari'],
-    'recources-eco': ['mamipoor', 'soheyli'],
-    'research methods': ['ghaemi', 'tajmir'],
-    'public-eco2': ['khandan', 'ebrahimi'],
-    'eco-system': ['nazemi'],
-    'money-eco': ['ghaemi'],
-    'iran-2': ['shaghaghi'],
-    'econometrics1': ['amiri', 'rafei', 'monjazeb'],
-    'macro3': ['amiri', 'rafei', 'sayyadi'],
-    'micro3': ['khandan', 'mamipoor'],
-    'eco-history': ['amiri'],
-    'fegh-h eghtesadi': ['tajmir'],
-    'micro1': ['ebrahimi', 'nazemi', 'mamipoor'],
-    'macro1': ['rafei', 'amiri', 'monjazeb'],
-    'stats2': ['soheyli']
+    'inter-finance': ['teacher1'],
+    'Islamic-finance': ['teacher2'],
+    'economic-evaluation': ['teacher3', 'teacher4'],
+    'indust-eco': ['teacher5'],
+    'recources-eco': ['teacher6', 'teacher7'],
+    'research methods': ['teacher8', 'teacher9'],
+    'public-eco2': ['teacher10', 'teacher11'],
+    'eco-system': ['teacher12'],
+    'money-eco': ['teacher13'],
+    'iran-2': ['teacher14'],
+    'econometrics1': ['teacher15', 'teacher4', 'teacher7'],
+    'macro3': ['teacher11', 'teacher3', 'teacher1'],
+    'micro3': ['teacher9', 'teacher8'],
+    'eco-history': ['teacher10'],
+    'fegh-h eghtesadi': ['teacher5'],
+    'micro1': ['teacher6', 'teacher4', 'teacher12'],
+    'macro1': ['teacher13', 'teacher14', 'teacher15'],
+    'stats2': ['teacher5']
 }
 
 # Define teacher availability
 teacher_unavailability = {
-    'afshari': {'Saturday': ['8 - 10'], 'Sunday': ['8 - 10'], 'Monday': ['8 - 10'], 'Tuesday': ['8 - 10'], 'Wednesday': ['8 - 10']},
-    'shaghaghi': {'Tuesday': ['14 - 16']}
+    'teacher1': {'Saturday': ['8 - 10'], 'Sunday': ['8 - 10'], 'Monday': ['8 - 10'], 'Tuesday': ['8 - 10'], 'Wednesday': ['8 - 10']},
+    'teacher10': {'Tuesday': ['14 - 16']}
     # Add availability for other teachers as needed
 }
 
