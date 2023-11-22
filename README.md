@@ -18,12 +18,12 @@ This Python script generates a class schedule for a set of courses, classrooms, 
 2. Run the script:
 
     ```bash
-    python schedule_generator.py
+    python Scheduler.py
     ```
 
 3. Check the output:
 
-    The generated schedule will be saved in an Excel file named `final.xlsx` with two sheets: 'Closer Schedule' and 'Teacher Info'.
+    The generated schedule will be saved in an Excel file named `Course-Schedule.xlsx` with two sheets: 'Schedule' and 'Teacher Info'.
 
 ## Configuration
 
