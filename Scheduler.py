@@ -93,7 +93,7 @@ days = ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday']
 
 
 # Define a function to create a schedule with courses grouped closely
-def create_closer_schedule(courses, teachers, course_to_teacher, teacher_):
+def create_schedule(courses, teachers, course_to_teacher, teacher_unavailability):
     schedule = []
     teacher_info = {teacher: {'classes': 0, 'workdays': 0, 'credits': 10} for teacher in teachers}
     days = ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday']
@@ -185,11 +185,11 @@ def create_closer_schedule(courses, teachers, course_to_teacher, teacher_):
         columns=['Teacher', 'Total Classes', 'Total Workdays', 'Remaining Credits'])
 
     # Save the closer schedule and teacher information to an Excel file with two sheets
-    with pd.ExcelWriter('final.xlsx') as writer:
-        closer_df.to_excel(writer, sheet_name='Closer Schedule', index=False)
+    with pd.ExcelWriter('Course-Schedule.xlsx') as writer:
+        closer_df.to_excel(writer, sheet_name='Schedule', index=False)
         teacher_info_df.to_excel(writer, sheet_name='Teacher Info', index=False)
 
 
 # Generate the schedule
-create_closer_schedule(courses, teachers, course_to_teacher, teacher_unavailability)
+create_schedule(courses, teachers, course_to_teacher, teacher_unavailability)
 
