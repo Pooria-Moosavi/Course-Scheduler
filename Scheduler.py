@@ -101,80 +101,116 @@ def create_schedule(courses, teachers, course_to_teacher, teacher_unavailability
 
     teacher_info = {teacher: {'classes': 0, 'workdays': 0, 'credits': 10} for teacher in teachers}
 
-    # Loop through each course to schedule their classes
+    # Group courses by their 'group' attribute
+    grouped_courses = {}
     for course, course_info in courses.items():
-        credits = course_info['credits']
+        group = course_info['group']
+        if group not in grouped_courses:
+            grouped_courses[group] = []
+        grouped_courses[group].append((course, course_info))
 
-        # Check if the course is explicitly defined in course_to_teacher
-        if course in course_to_teacher:
-            assigned_teachers = course_to_teacher.get(course, [])
-            if not isinstance(assigned_teachers, list):
-                assigned_teachers = [assigned_teachers]
+    # Loop through each group of courses
+    for group, group_courses_data in grouped_courses.items():
+        group_courses, group_info = zip(*group_courses_data)
 
-            # Calculate the total number of timeslots needed for the course
-            total_timeslots = 2 if credits == 3 else 1
+        # Create a list to store the schedule for each teacher in the group
+        teacher_grouped_schedules = [{} for _ in group_courses_data]
 
-            for teacher in assigned_teachers:
-                if teachers[teacher]['credits'] >= credits and len(teachers[teacher]['workdays']) <= 3:
-                    # Check if the teacher has enough credits for the entire course
-                    if teachers[teacher]['credits'] >= total_timeslots:
-                        teachers[teacher]['credits'] -= total_timeslots
-                        teachers[teacher]['classes'] += total_timeslots
+        # Loop through each course in the group to schedule their classes
+        for course, course_info in group_courses_data:
+            credits = course_info['credits']
 
-                        assigned_days = []
-                        for _ in range(total_timeslots):
-                            # Choose a day and time slot
-                            day = random.choice(days)
-                            time_slot = random.choice(time_slots)
+            # Check if the course is explicitly defined in course_to_teacher
+            if course in course_to_teacher:
+                assigned_teachers = course_to_teacher.get(course, [])
+                if not isinstance(assigned_teachers, list):
+                    assigned_teachers = [assigned_teachers]
 
-                            # Check teacher unavailability
-                            while day in teacher_unavailability.get(teacher, {}) and time_slot in \
-                                    teacher_unavailability[teacher][day]:
+                # Calculate the total number of timeslots needed for the course
+                total_timeslots = 2 if credits == 3 else 1
+
+                for teacher in assigned_teachers:
+                    if teachers[teacher]['credits'] >= credits and len(teachers[teacher]['workdays']) <= 3:
+                        # Check if the teacher has enough credits for the entire course
+                        if teachers[teacher]['credits'] >= total_timeslots:
+                            teachers[teacher]['credits'] -= total_timeslots
+                            teachers[teacher]['classes'] += total_timeslots
+
+                            assigned_days = []
+                            for _ in range(total_timeslots):
+                                # Choose a day and time slot
                                 day = random.choice(days)
                                 time_slot = random.choice(time_slots)
 
-                            assigned_days.append(day)
+                                # Check teacher unavailability
+                                while (
+                                        day in teacher_unavailability.get(teacher, {})
+                                        and time_slot in teacher_unavailability[teacher][day]
+                                ) or (
+                                        day in assigned_days
+                                        or any(
+                                    (day, time_slot) in grouped_schedule.get(teacher, [])
+                                    for grouped_schedule in teacher_grouped_schedules
+                                )
+                                ):
+                                    day = random.choice(days)
+                                    time_slot = random.choice(time_slots)
+
+                                assigned_days.append(day)
+
+                            # For 3-credit courses, make sure classes are on different days
+                            if credits == 3 and len(set(assigned_days)) == 1:
+                                other_day_options = list(set(days) - {assigned_days[0]})
+                                assigned_days.append(random.choice(other_day_options))
 
                             # Assign the course to the teacher
-                            schedule.append([day, time_slot, course, random.choice(classes), teacher])
+                            for day in assigned_days:
+                                time_slot = random.choice(time_slots)
+                                schedule.append([day, time_slot, course, random.choice(classes), teacher])
 
-                        # Update teacher_info dictionary
-                        teacher_info[teacher]['classes'] += total_timeslots
-                        teacher_info[teacher]['workdays'] += len(set(assigned_days))
-                        teacher_info[teacher]['credits'] = 10 - teachers[teacher]['credits']
+                                # Update the grouped_schedule for the teacher
+                                teacher_grouped_schedules[assigned_teachers.index(teacher)].setdefault(teacher,
+                                                                                                       []).append(
+                                    (day, time_slot))
 
+                            # Update teacher_info dictionary
+                            teacher_info[teacher]['classes'] += total_timeslots
+                            teacher_info[teacher]['workdays'] += len(set(assigned_days))
+                            teacher_info[teacher]['credits'] = 10 - teachers[teacher]['credits']
+
+
+                        else:
+                            print(f"Skipping {course} for {teacher}. Insufficient credits.")
                     else:
-                        print(f"Skipping {course} for {teacher}. Insufficient credits.")
-                else:
-                    print(f"Skipping {course} for {teacher}. Insufficient credits or exceeds workday limit.")
-        else:
-            # Assign 1 class (1 timeslot) per teacher for 2-credit courses, 2 classes (2 timeslots) for 3-credit courses
-            total_timeslots = 2 if credits == 3 else 1
-            available_teachers = [t for t, info in teachers.items() if
-                                  info['credits'] >= credits and len(info['workdays']) <= 3]
+                        print(f"Skipping {course} for {teacher}. Insufficient credits or exceeds workday limit.")
+            else:
+                # Assign 1 class (1 timeslot) per teacher for 2-credit courses, 2 classes (2 timeslots) for 3-credit courses
+                total_timeslots = 2 if credits == 3 else 1
+                available_teachers = [t for t, info in teachers.items() if
+                                      info['credits'] >= credits and len(info['workdays']) <= 3]
 
-            if not available_teachers:
-                print(f"No available teachers for {course}. Resetting teacher credits.")
-                for t in teachers:
-                    teachers[t]['credits'] = 10
-                    teachers[t]['workdays'] = []
-                available_teachers = list(teachers.keys())
+                if not available_teachers:
+                    print(f"No available teachers for {course}. Resetting teacher credits.")
+                    for t in teachers:
+                        teachers[t]['credits'] = 10
+                        teachers[t]['workdays'] = []
+                    available_teachers = list(teachers.keys())
 
-            for _ in range(total_timeslots):
-                # If it's a 3-credit course, assign 1 random teacher for 2 timeslots
-                if credits == 3:
-                    teacher = random.choice(available_teachers)
-                    available_teachers.remove(teacher)
-                else:
-                    teacher = random.choice(available_teachers)
+                for _ in range(total_timeslots):
+                    # If it's a 3-credit course, assign 1 random teacher for 2 timeslots
+                    if credits == 3:
+                        teacher = random.choice(available_teachers)
+                        available_teachers.remove(teacher)
+                    else:
+                        teacher = random.choice(available_teachers)
 
-                teachers[teacher]['credits'] -= credits
-                teachers[teacher]['classes'] += 1
-                teachers[teacher]['workdays'].append(random.choice(days))
+                    teachers[teacher]['credits'] -= credits
+                    teachers[teacher]['classes'] += 1
+                    teachers[teacher]['workdays'].append(random.choice(days))
 
-                day = teachers[teacher]['workdays'].pop(0)
-                time_slot = random.choice(time_slots)
-                schedule.append([day, time_slot, course, random.choice(classes), teacher])
+                    day = teachers[teacher]['workdays'].pop(0)
+                    time_slot = random.choice(time_slots)
+                    schedule.append([day, time_slot, course, random.choice(classes), teacher])
 
     # Create a Pandas DataFrame for the entire schedule
     closer_df = pd.DataFrame(schedule, columns=['Day', 'TimeSlot', 'Course', 'Classroom', 'Teacher'])
@@ -184,12 +220,13 @@ def create_schedule(courses, teachers, course_to_teacher, teacher_unavailability
         [(teacher, info['classes'], info['workdays'], 10 - info['credits']) for teacher, info in teacher_info.items()],
         columns=['Teacher', 'Total Classes', 'Total Workdays', 'Remaining Credits'])
 
-    # Save the closer schedule and teacher information to an Excel file with two sheets
-    with pd.ExcelWriter('Course-Schedule.xlsx') as writer:
+    # Save the closer schedule and teacher information to an Excel file with different sheets for each group
+    with pd.ExcelWriter('Course_Schedule.xlsx') as writer:
         closer_df.to_excel(writer, sheet_name='Schedule', index=False)
         teacher_info_df.to_excel(writer, sheet_name='Teacher Info', index=False)
 
-
 # Generate the schedule
 create_schedule(courses, teachers, course_to_teacher, teacher_unavailability)
+
+
 
