@@ -92,7 +92,7 @@ teacher_unavailability = {
 days = ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday']
 
 # Define a function to create a schedule with courses grouped closely
-def create_closer_schedule(courses, teachers, course_to_teacher, teacher_unavailability):
+def create_schedule(courses, teachers, course_to_teacher, teacher_unavailability):
     schedule = []
     teacher_info = {teacher: {'classes': 0, 'workdays': set(), 'credits': 10} for teacher in teachers}
     days = ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday']
@@ -200,4 +200,4 @@ def create_closer_schedule(courses, teachers, course_to_teacher, teacher_unavail
         teacher_info_df.to_excel(writer, sheet_name='Teacher Info', index=False)
 
 # Generate the schedule
-create_closer_schedule(courses, teachers, course_to_teacher, teacher_unavailability)
+create_schedule(courses, teachers, course_to_teacher, teacher_unavailability)
