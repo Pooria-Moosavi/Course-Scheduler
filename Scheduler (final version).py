@@ -195,7 +195,7 @@ def create_schedule(courses, teachers, course_to_teacher, teacher_unavailability
         columns=['Teacher', 'Total Classes', 'Total Workdays', 'Remaining Credits'])
 
     # Save the closer schedule and teacher information to an Excel file with two sheets
-    with pd.ExcelWriter('final Schedule.xlsx') as writer:
+    with pd.ExcelWriter('Course-Schedule.xlsx') as writer:
         closer_df.to_excel(writer, sheet_name='Schedule', index=False)
         teacher_info_df.to_excel(writer, sheet_name='Teacher Info', index=False)
 
